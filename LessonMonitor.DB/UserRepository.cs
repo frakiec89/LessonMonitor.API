@@ -29,7 +29,7 @@ namespace LessonMonitor.DB
         {
             try
             {
-                ModelDB.User userDB = new ModelDB.User() { Age = user.Age, Name = user.Name };
+                ModelDB.User userDB = ReMaping(user);
                 myContext.Users.Add(userDB);
                 myContext.SaveChanges();
             }
@@ -38,6 +38,11 @@ namespace LessonMonitor.DB
                 throw new ArgumentException("Error DB");
             }
 
+        }
+
+        private static ModelDB.User ReMaping(User user)
+        {
+            return new ModelDB.User() { Age = user.Age, Name = user.Name };
         }
 
         public User[] Get()

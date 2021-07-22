@@ -8,6 +8,8 @@ using MonitorLesson.Core.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -18,18 +20,16 @@ namespace LessonMonitor.API.Controllers
     public class UsersController : ControllerBase
     {
         IUserService _userService;
-
         public UsersController()
         {
-            _userService = new UserService(new UserRepository());  // Инициализация - нужно  будет вынести  за рамки контроллера 
+            _userService = new UserService(new UserRepository());  // todo Инициализация - нужно  будет вынести  за рамки контроллера 
         }
 
-        [HttpGet("GetUser")]
+        [HttpGet("GetUsers")]
         public   User [] GetUser()
         {
             return  _userService.Get();
         }
-
 
         [HttpPost ("AddUser")]
         public void Creat(UserAPI userApi )
