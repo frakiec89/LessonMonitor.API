@@ -9,41 +9,54 @@ namespace LessonMonitor.DB
 {
     public class UserRepository : IUserRepository
     {
-        List<User> _users = new List<User>();
+
+        ModelDB.MyContext myContext;
         public UserRepository()
         {
-            _users = GetStart().ToList();
+             myContext = new ModelDB.MyContext();
         }
+       
 
-        private User[] GetStart ()
+        private User Maping(ModelDB.User userDb)
         {
-            List<User> users = new List<User>();
-
-            for (int i = 0; i < 1; i++)
-            {
-                users.Add(Maping());
-            }
-            return users.ToArray();
-        }
-
-        private User Maping()
-        {
-            ModelDB.User userDd = new ModelDB.User();
-
             User user = new User();
-            user.Age = userDd.Age;
-            user.Name = userDd.Name;
+            user.Age = userDb.Age;
+            user.Name = userDb.Name;
             return user;
         }
 
         public void Create (User user)
         {
-            _users.Add(user);
+            try
+            {
+                ModelDB.User userDB = new ModelDB.User() { Age = user.Age, Name = user.Name };
+                myContext.Users.Add(userDB);
+                myContext.SaveChanges();
+            }
+            catch
+            {
+                throw new ArgumentException("Error DB");
+            }
+
         }
 
         public User[] Get()
         {
-            return _users.ToArray();
+            List<User> users = new List<User>();
+            
+            try
+            {
+                foreach (var item in myContext.Users)
+                {
+                    users.Add(Maping(item));
+                }
+                return users.ToArray();
+            }
+            catch
+            {
+                throw new ArgumentException("Error DB");
+            }
+            
         }
     }
 }
